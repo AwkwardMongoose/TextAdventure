@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/main.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Salsa&display=swap" rel="stylesheet">
+    <title>Text Adventure Game</title>
+</head>
+<body>
+    <div class="createtop">
+        <div class="createframe">
+            <div class="createname">
+                <span class="createheader">State Your Name</span>
+                <input class="nameinput" type="text" value="Nameless" placeholder="Name your character..." id="nameselect">
+            </div>
+            <div class="createlist">
+                <div class="createcolumn">
+                    <span class="createheader">Determine Your Gender</span>
+                    <input class="createradio" type="radio" name="genderselect" id="male" value="Male">
+                    <label for="male">Male</label>
+                    <input class="createradio" type="radio" name="genderselect" id="female" value="Female">
+                    <label for="female">Female</label>
+                </div>
+            </div>
+            <div class="createlist">
+                <div class="createcolumn">
+                    <span class="createheader">Pick Your Race</span>
+                    <input class="createradio" type="radio" name="raceselect" id="human" value="Human">
+                    <label for="human">Human</label>
+                    <input class="createradio" type="radio" name="raceselect" id="elf" value="Elf">
+                    <label for="elf">Elf</label>
+                    <input class="createradio" type="radio" name="raceselect" id="dwarf" value="Dwarf">
+                    <label for="dwarf">Dwarf</label>
+                </div>
+            </div>
+            <div>
+                <button class="navbutton" style="text-align: center !important;align-items: center;" id="createfinish">Finish</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="interface">
+        <div class="navbar">
+            <div class="navtop">
+    
+            </div>
+            <div class="navtime">
+                <span>Stuff Goes Here</span>
+            </div>
+            <div class="descarea">
+                <div class="desc">
+                    <span>You are ${NAME}.</span>
+                </div>
+            </div>
+            <div class="statusarea">
+                <div class="statusinner">
+                    <div class="hptext">
+                        HP:
+                    </div>
+                    <div class="statusbar" id="hpbar">
+    
+                    </div>                
+                </div>
+                <div class="statusinner">
+                    <div>
+                        MP:
+                    </div>
+                    <div class="statusbar" id="mpbar">
+    
+                    </div>                
+                </div>
+            </div>
+            <div class="navbuttons">
+                <input class="navcheck" type="checkbox" id="navstats">
+                <label class="navbutton" for="navstats">
+                    <div class="navbuttontext">
+                        Stats
+                    </div>
+                </label>
+                <input class="navcheck" type="checkbox" id="navtraits">
+                <label class="navbutton" for="navtraits">
+                    <div class="navbuttontext">
+                        Traits
+                    </div>
+                </label>
+                <input class="navcheck" type="checkbox" id="navmap">
+                <label class="navbutton" for="navmap">
+                    <div class="navbuttontext">
+                        Map
+                    </div>
+                </label>
+            </div>
+            <div class="hptest">
+                <button id="damagetest">2 Damage!</button>
+            </div>
+        </div>
+        <div class="textblock">
+            <div class="textframe" id="textframe">
+    
+            </div>
+        </div>
+    </div>
+
+    <div class="statframe" id="statframe">
+        <div class="statwindow">
+
+        </div>
+    </div>
+</body>
+<script src="./libs/jquery-3.7.1.min.js" defer></script>
+<script src="./js/introspected.js" defer></script>
+<script src="./js/main.js" defer></script>
+<script src="./js/char.js" defer></script>
+<script src="./js/events.js" defer></script>
+</html>
