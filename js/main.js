@@ -2,6 +2,10 @@
         $('body').css('display','block')
     })
 
+    function roll(x) {
+        return Math.floor(Math.random() * x) + 1;
+    }
+
     var gameState = JSON.parse(localStorage.getItem('current'));
 
     if (localStorage.getItem('current')) {
@@ -116,7 +120,7 @@
         $('.createtop').css('display','none');
         mainChar = char('mainChar')
         updateUI()
-        updateLoc()
+        updateLoc(0)
         location.reload()
         //console.log(mainChar)
     })
@@ -160,7 +164,7 @@
     })
 
     damageButton.addEventListener("click", () => {
-        dealDamage(char('mainChar'),2)
+        updateLoc(0)
     });
 
     $("span").html(function(index, html){
@@ -204,4 +208,36 @@
     //for ( var i = 0, len = localStorage.length; i < len; ++i ) {
     //    console.log(JSON.parse(localStorage.getItem(localStorage.key(i))) );
     //}
-      console.log(localStorage)
+    console.log(localStorage)
+
+
+    const canvas = document.getElementById("myCanvas");
+    const ctx = canvas.getContext("2d");
+    const img = new Image();
+    var drawx = 0;
+    var drawy = 0;
+    img.onload = function() {
+        //ctx.drawImage(img, drawx, drawy,20,20);
+        //ctx.drawImage(img, 50, 50,100,100);
+    };
+    img.src = 'https://art.pixilart.com/47557c3289a5e06.png';
+    console.log(img)
+
+    function draw(e) {
+        var pos = getMousePos(canvas, e);
+        posx = pos.x;
+        posy = pos.y;
+        drawx = posx;
+        drawy = posy;
+        ctx.clearRect(0, 0, canvas.width, canvas.height)
+        ctx.drawImage(img, drawx-25, drawy-25,50,50);
+    }
+    window.addEventListener('mousemove', draw, false);
+    
+    function getMousePos(canvas, evt) {
+        var rect = canvas.getBoundingClientRect();
+        return {
+            x: (evt.clientX - rect.left) / (rect.right - rect.left) * canvas.width,
+            y: (evt.clientY - rect.top) / (rect.bottom - rect.top) * canvas.height
+        };
+    }

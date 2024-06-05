@@ -26,11 +26,11 @@ class Location {
 
 function newLoc(id,name,x,y,desc,parent,directions,evchance) {
     if (Object.keys(gameState.locations.entries).includes(id)) {
-        console.log(name+' #'+id+' loaded!')
+        //console.log(name+' #'+id+' loaded!')
     } else {
         let c = new Location(id,name,x,y,desc,parent,directions,evchance);
-        console.log(name+' #'+c.id+' created!')
-        console.log(c)
+        //console.log(name+' #'+c.id+' created!')
+        //console.log(c)
         c.store;
     }
 };
@@ -60,45 +60,89 @@ var westDesc = `
 Welcome to the West!
 `;
 
-newLoc('start','Start',0,0,startDesc,'NSEW',10)
-newLoc('north','North',0,-1,northDesc,'NSEW',10)
-newLoc('south','South',0,1,southDesc,'NSEW',10)
-newLoc('west','West',-1,0,westDesc,'NSEW',10)
-newLoc('east','East',1,0,eastDesc,'NSEW',10)
+newLoc('start','Start',0,0,startDesc,null,'NSEW',10)
+newLoc('north','North',0,-1,northDesc,null,'NSEW',10)
+newLoc('south','South',0,1,southDesc,null,'NSEW',10)
+newLoc('west','West',-1,0,westDesc,null,'NSEW',10)
+newLoc('east','East',1,0,eastDesc,null,'NSEW',10)
 
-function setLoc(location) {
+function generateCells() {
+    let exists = {};
+    for(var x = -10; x < 11; x++) {
+        for(var y = -10; y < 11; y++) {
+            let obj = {
+                'x': x,
+                'y': y
+            }
+            exists[uuid()] = obj
+        }
+    }
+    //console.log(exists)
+    Object.entries(exists).forEach(el => {
+        let nx = el[1];
+        let nxid = el[0];
+        if (coordCheck(nx.x,nx.y) == false) {
+            console.log(nx)
+            let desc = 'Welcome to cell '+nx.x+','+nx.y+'.';
+            newLoc(nxid,nxid,nx.x,nx.y,desc,null,'NSEW',10)
+        }
+    })
+}
+generateCells()
+
+function setLoc(location,ev) {
     console.log(location)
     mainChar.location = loc(location);
-    updateLoc()
+    let chance = ev != undefined ? ev : mainChar.location.evchance
+    updateLoc(chance)
     updateUI()
 }
 
-function updateLoc() {
+function updateLoc(x) {
     console.log(mainChar.location)
-    let navList = getNavLinks(mainChar.location)
-    $('#textframe').empty()
-    $('#textframe').append(mainChar.location.desc+'<br><br><br>')
-    navList.forEach(el => {
-        $('#textframe').append(el+'<br>')
-    })
-    $('.navlink').on('click', (el) => {
-        setLoc(el.target.id)
-    })
+
+    let evChance = x != undefined ? x : mainChar.location.evchance;
+    console.log(evChance)
+    if (roll(100) <= evChance) {
+        $('#textframe').empty()
+        $('#navframe').empty()
+        $('#childframe').empty()
+        $('#textframe').append(`
+        EVENT
+        `)
+        let ex = `<div class='navlink' id=`+mainChar.location.id+`>`+mainChar.location.name+` (`+mainChar.location.direction+`)</div>`
+        $('#navframe').append(ex+'<br>')
+        $('.navlink').on('click', (el) => {
+            setLoc(el.target.id)
+        })
+    } else {
+        let navList = getNavLinks(mainChar.location)
+        $('#textframe').empty()
+        $('#navframe').empty()
+        $('#childframe').empty()
+        $('#textframe').append(mainChar.location.desc+'<br><br><br>')
+        navList.forEach(el => {
+            $('#navframe').append(el+'<br>')
+        })
+        $('.navlink').on('click', (el) => {
+            setLoc(el.target.id)
+        })
+    }
 }
 
 function getNavLinks(location) {
     let arr = [];
     coordList(location.id).forEach(el => {
         let x = `
-        <div class='navlink' id=`+loc(el).id+`>`+loc(el).name+`</div>
+        <div class='navlink' id=`+loc(el).id+`>`+loc(el).name+` (`+loc(el).direction+`)</div>
         `
         arr.push(x)
     })
     return arr;
 }
 
-console.log(mainChar.location)
-updateLoc()
+//console.log(mainChar.location)
+updateLoc(0)
 
 class Event {
     constructor(id,name) {
@@ -158,20 +202,35 @@ function coordList($id) {
     Object.entries(gameState.locations.entries).forEach(el => {
         let curr = el[1];
         if (start.x == curr.x && start.y-1 == curr.y) {
-            console.log(curr.id,'North')
+            //console.log(curr.id,'North')
+            curr.direction = 'North';
             arrList.push(curr.id)
         } else if (start.x == curr.x && start.y+1 == curr.y) {
-            console.log(curr.id,'South')
+            //console.log(curr.id,'South')
+            curr.direction = 'South';
             arrList.push(curr.id)
         } else if (start.x-1 == curr.x && start.y == curr.y) {
-            console.log(curr.id,'West')
+            //console.log(curr.id,'West')
+            curr.direction = 'West';
             arrList.push(curr.id)
         } else if (start.x+1 == curr.x && start.y == curr.y) {
-            console.log(curr.id,'East')
+            //console.log(curr.id,'East')
+            curr.direction = 'East';
             arrList.push(curr.id)
         }
     })
     return arrList
+}
+
+function coordCheck(x,y) {
+    let result = false;
+    Object.entries(gameState.locations.entries).forEach(el => {
+        let ex = el[1];
+        if (ex.x == x && ex.y == y) {
+            result = true;
+        }
+    })
+    return result
 }
 
 /*coordList('start').forEach(el => {
