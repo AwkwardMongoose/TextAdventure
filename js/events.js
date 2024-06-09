@@ -112,7 +112,7 @@ function updateLoc(ch) {
     ctx.fillRect(loca.x*12,loca.y*12, 10, 10);
 
     console.log(mainChar.location)
-    let evChance = ch != undefined ? ch : mainChar.location.evchance;
+    let evChance = 0;//ch != undefined ? ch : mainChar.location.evchance;
     console.log(evChance)
     if (roll(100) <= evChance) {
         $('#textframe').empty()
