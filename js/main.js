@@ -108,9 +108,11 @@
     const rootCSS = $(":root");
     const varToString = varObj => Object.keys(varObj)[0];
     const damageButton = document.getElementById('damagetest');
+    const healingButton = document.getElementById('healingtest');
     var navChecks = Array.from(document.getElementsByClassName('navcheck'));
     var classTest = $(".navcheck");
     var hpBar = $("#hpbar");
+    var mpBar = $("#mpbar");
 
     document.getElementById('createfinish').addEventListener('click', () => {
         let name = document.getElementById('nameselect').value;
@@ -140,8 +142,12 @@
     updateUI()
 
     function dealDamage(target,amount) {
-        damage = target.hp>0 ? amount : 0;
-        target.hp -= damage;
+        target.hp -= amount;
+        if (target.hp >= target.maxhp) {
+            target.hp = target.maxhp;
+        } else if (target.hp <= 0) {
+            target.hp = 0;
+        }
         //console.log(damage)
         updateHP()
         deathCheck(target)
@@ -164,7 +170,13 @@
     })
 
     damageButton.addEventListener("click", () => {
-        updateLoc(0)
+        dealDamage(mainChar,2)
+        console.log(mainChar.hp)
+    });
+
+    healingButton.addEventListener("click", () => {
+        dealDamage(mainChar,-2)
+        console.log(mainChar.hp)
     });
 
     $("span").html(function(index, html){
@@ -190,6 +202,26 @@
             //console.log(mainChar.hp+"/"+mainChar.maxhp,currHP+"%")
             rootCSS.css('--hpfill',currHP+"%")
             hpBar[0].title = mainChar.hp+" / "+mainChar.maxhp;
+        }
+    }
+
+    function updateMP () {
+        if (mainChar) {
+            let currMP = mainChar.mp/mainChar.maxmp*100;
+            if (currMP <= mainChar.maxmp/mainChar.maxmp*100) {
+                if (currMP <= 0) {
+                    currMP = 0;
+                    mainChar.mp = 0;
+                } else {
+                    currHP = mainChar.mp/mainChar.maxmp*100;
+                }
+            } else {
+                currMP = mainChar.maxmp/mainChar.maxmp*100;
+                mainChar.mp = mainChar.maxmp
+            }
+            //console.log(mainChar.hp+"/"+mainChar.maxhp,currHP+"%")
+            rootCSS.css('--mpfill',currMP+"%")
+            mpBar[0].title = mainChar.mp+" / "+mainChar.maxmp;
         }
     }
 
