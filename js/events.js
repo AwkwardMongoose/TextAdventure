@@ -97,11 +97,22 @@ function setLoc(location,ev) {
     updateLoc(chance)
     updateUI()
 }
-
-function updateLoc(x) {
+ctx.translate(120,120)
+function updateLoc(ch) {
     console.log(mainChar.location)
+    let loca = mainChar.location;
+    ctx.clearRect(-125, -125, canvas.width, canvas.height)
+    Object.entries(gameState.locations.entries).forEach(el => {
+        let eloc = el[1];
+        ctx.fillStyle = "gray";
+        ctx.fillRect(eloc.x*12,eloc.y*12, 10, 10);
+    })
+    ctx.fillStyle = 'yellow';
+    console.log(loca)
+    ctx.fillRect(loca.x*12,loca.y*12, 10, 10);
 
-    let evChance = x != undefined ? x : mainChar.location.evchance;
+    console.log(mainChar.location)
+    let evChance = ch != undefined ? ch : mainChar.location.evchance;
     console.log(evChance)
     if (roll(100) <= evChance) {
         $('#textframe').empty()
@@ -116,16 +127,36 @@ function updateLoc(x) {
             setLoc(el.target.id)
         })
     } else {
-        let navList = getNavLinks(mainChar.location)
+        //let navList = getNavLinks(mainChar.location)
         $('#textframe').empty()
         $('#navframe').empty()
         $('#childframe').empty()
         $('#textframe').append(mainChar.location.desc+'<br><br><br>')
-        navList.forEach(el => {
-            $('#navframe').append(el+'<br>')
-        })
-        $('.navlink').on('click', (el) => {
-            setLoc(el.target.id)
+        //console.log(coordList(mainChar.location.id))
+        coordList(mainChar.location.id).forEach(el => {
+            let eloc = loc(el);
+            console.log(eloc.id,eloc.direction)
+            if (eloc.direction == 'North') {
+                $('.dirup').off('click')
+                $('.dirup').on('click', (el) => {
+                    setLoc(eloc.id)
+                })
+            } else if (eloc.direction == 'South') {
+                $('.dirdown').off('click')
+                $('.dirdown').on('click', (el) => {
+                    setLoc(eloc.id)
+                })
+            } else if (eloc.direction == 'West') {
+                $('.dirleft').off('click')
+                $('.dirleft').on('click', (el) => {
+                    setLoc(eloc.id)
+                })
+            } else if (eloc.direction == 'East') {
+                $('.dirright').off('click')
+                $('.dirright').on('click', (el) => {
+                    setLoc(eloc.id)
+                })
+            }
         })
     }
 }
@@ -133,6 +164,8 @@ function updateLoc(x) {
 function getNavLinks(location) {
     let arr = [];
     coordList(location.id).forEach(el => {
+
+
         let x = `
         <div class='navlink' id=`+loc(el).id+`>`+loc(el).name+` (`+loc(el).direction+`)</div>
         `
@@ -217,6 +250,8 @@ function coordList($id) {
             //console.log(curr.id,'East')
             curr.direction = 'East';
             arrList.push(curr.id)
+        } else {
+            curr.direction = ''
         }
     })
     return arrList

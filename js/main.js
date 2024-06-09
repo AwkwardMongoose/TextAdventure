@@ -232,7 +232,7 @@
         ctx.clearRect(0, 0, canvas.width, canvas.height)
         ctx.drawImage(img, drawx-25, drawy-25,50,50);
     }
-    window.addEventListener('mousemove', draw, false);
+    //window.addEventListener('mousemove', draw, false);
     
     function getMousePos(canvas, evt) {
         var rect = canvas.getBoundingClientRect();
