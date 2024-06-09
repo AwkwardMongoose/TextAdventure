@@ -109,6 +109,7 @@
     const varToString = varObj => Object.keys(varObj)[0];
     const damageButton = document.getElementById('damagetest');
     const healingButton = document.getElementById('healingtest');
+    const resetButton = document.getElementById('reset');
     var navChecks = Array.from(document.getElementsByClassName('navcheck'));
     var classTest = $(".navcheck");
     var hpBar = $("#hpbar");
@@ -177,6 +178,12 @@
     healingButton.addEventListener("click", () => {
         dealDamage(mainChar,-2)
         console.log(mainChar.hp)
+    });
+
+    resetButton.addEventListener("click", () => {
+        console.log('Resetting!')
+        localStorage.clear()
+        window.location.reload()
     });
 
     $("span").html(function(index, html){
